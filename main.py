@@ -3,11 +3,30 @@ from optparse import OptionParser
 import sys
 import MySQLdb
 
-def parse_file(name, db=None, table=None, user=None, pword=None) :
-    
+global_dict = dict()
+
+def shift_listl(lst) :
+    for i in range(len(lst)-1) :
+        lst[i] = lst[i+1]
+
+def shift_wordsl(lst, word) :
+    shift_listl(lst)
+    lst[len(lst)] = word
     
 
-def main():
+def parse_file(fname, db=None, table=None, user=None, pword=None) :
+    fd = open(fname, 'r')
+    order = 2;
+    last_words = [None] * order
+    for line in fd :
+        words = line.split(" ")
+        for word in words :
+            if !last_words.count(None) :
+                shift_wordsl(last_words, word)
+                
+
+
+def main() :
     parser = OptionParser()
     parser.add_option("-f", "--file", dest="filename", type="string",
                       help="Specify a text file to learn from.", default=None)
