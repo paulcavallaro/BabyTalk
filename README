@@ -1,1 +1,3 @@
-Blank README
+BabyTalk is a little python doo-hickey that will use a Markov Model to learn from a training text file
+and then generate sentences from its learned model. Just a fun side project to learn and maybe create
+something cool.
