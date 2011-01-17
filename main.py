@@ -12,7 +12,7 @@ def shift_listl(lst) :
 
 def shift_wordsl(lst, word) :
     shift_listl(lst)
-    lst[len(lst)-1] = word
+    lst[-1] = word
     
 def parse_file(fname, order) :
     fd = open(fname, 'r')
@@ -24,52 +24,29 @@ def parse_file(fname, order) :
         words = line.strip().split(" ")
         for word in words :
             shift_wordsl(prev_words, word)
-            wmap.put(prev_words)
+            if None not in prev_words :
+                wmap.put(prev_words)
     return wmap
 
 def init_words(words, wmap) :
-    for 
+    if words[-1] == None :
+        word = wmap.get_word(random.randint(0, wmap.count-1))
+        words[-1] = word
 
-def gen_sentence(seed, wmap) :
-    sentence = seed
-    word = seed
-    prev_words = [None] * order
-    init_words(prev_words, wmap)
+def gen_sentence(seed, wmap, order) :
+    #sentence = seed
+    words = [None] * order
+    #words[-len(seed):] = seed
+    init_words(words, wmap)
+    sentence = []
+    word = words[-1]
+    sentence.append(word)
     while not word[-1:] in conclusions :
-        val = random.randint(0, wmap.count-1)
-        for key in wmap.table.keys() :
-            if wmap.order > 0 :
-                count += wmap.table[key].count
-            else :
-                count += wmap.table[key]
-            if count >= val :
-                word = key
-                break
-        sentence += " " + word
-        shiftl_words(prev_words, word)
+        word = wmap.get_next_word(words)
+        sentence.append(word)
+        shift_wordsl(words, word)
         
-
-    wmap = wmap.table.get(word, None)
-
-
-
-    while not word[-1:] in conclusions :
-        while not word[-1:] in conclusions and wmap.order > 0 :
-            val = random.randint(0, wmap.count-1)
-            count = 0
-            for key in wmap.table.keys() :
-                if wmap.order > 0 :
-                    count += wmap.table[key].count
-                else :
-                    count += wmap.table[key]
-                if count >= val :
-                    word = key
-                    break
-            sentence += " " + word
-        if wmap.order
-        wmap = wmap.table[key]
-        wmap = wmap.table.get(key, None)
-    return sentence
+    return ' '.join(sentence)
         
 
 
@@ -78,7 +55,7 @@ def main() :
     parser.add_option("-f", "--file", dest="filename", type="string",
                       help="Specify a text file to learn from.", default=None)
     parser.add_option("-s", "--seed", dest="seed", type="string",
-                      help="Specify a word or phrase to seed the generated sentence.", default="the")
+                      help="Specify a word or phrase to seed the generated sentence.", default='')
     parser.add_option("-d", "--database", dest="database", type="string",
                       help="Specify a MySQL DB to use", default=None)
     parser.add_option("-t", "--table", dest="table", type="string",
@@ -90,11 +67,11 @@ def main() :
     parser.add_option("-O", "--order", dest="order", type="int",
                       help="Specify the order of the Markov Chain.", default=2)
     
-    (ops, args) = parser.parse_args()
+    (opts, args) = parser.parse_args()
     
-    if ops.filename :
-        wmap = parse_file(ops.filename, ops.order)
-        print gen_sentence(ops.seed, wmap)
+    if opts.filename :
+        wmap = parse_file(opts.filename, opts.order)
+        print gen_sentence(opts.seed, wmap, opts.order)
     
     
     
